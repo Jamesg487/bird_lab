@@ -29,6 +29,35 @@ const createRouter = function (collection) {
       });
   });
 
+  // CREATE
+  router.post('/', (req, res) => {
+    const newData = req.body;
+    collection
+      .insertOne(newData)
+      .then((docs) => res.json(docs))
+      .catch((err) => {
+        console.error(err);
+        res.status(500);
+        res.json({ status: 500, error: err });
+      });
+  })
+
+  // UPDATE
+  router.put('/:id', (req,res) => {
+    const id = req.params.id;
+    const updatedData = req.body;
+    collection
+      .updateOne({_id: ObjectID(id)}, {$set: updatedData})
+      .then((doc) => res.json(doc))
+      .catch((err) => {
+        console.error(err);
+        res.status(500);
+        res.json({ status: 500, error: err });
+      });
+  }) 
+
+  // DELETE
+
   return router;
 };
 
