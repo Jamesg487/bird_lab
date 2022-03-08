@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Modal from 'react-modal';
 
 import './App.css';
 
@@ -9,6 +10,7 @@ import { getSightings } from "./SightingService";
 function App() {
 
   const [birdSightings, setBirdSightings] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   useEffect(()=>{
     getSightings().then((allSightings)=>{
@@ -31,8 +33,31 @@ function App() {
     setBirdSightings(temp);
   }
 
+  const handleButtonClick = () => {
+    setIsModalOpen(false);
+  }
+
   return (
     <>
+      <Modal
+          isOpen={isModalOpen}
+          ariaHideApp={false}
+          contentLabel="Update"
+      >
+          <div className="formWrap">
+              <label htmlFor="species">Species:</label>
+              <input type="text" id="species"  />
+          </div>
+          <div className="formWrap">
+              <label htmlFor="location">Location:</label>
+              <input type="text" id="location"  />
+          </div>
+          <div className="formWrap">
+              <label htmlFor="date">Date:</label>
+              <input type="date" id="date"  />
+          </div>
+          <button onClick={handleButtonClick}>OK</button>
+      </Modal>
       <SightingsForm addSighting={addSighting}/>
       <SightingsGrid sightings={birdSightings} removeSighting={removeSighting} />
     </>
